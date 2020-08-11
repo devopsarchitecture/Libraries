@@ -1,0 +1,29 @@
+IMPORTANT: It is safe to remove the workspace for a given Jenkins job as long as the job is not currently running!
+
+NOTE: I am assuming your $JENKINS_HOME is set to the default: /var/jenkins_home.
+
+Clean up one workspace
+--------------------------
+rm -rf /var/jenkins_home/workspaces/<workspace>
+
+Clean up all workspaces
+----------------------------
+rm -rf /var/jenkins_home/workspaces/*
+
+Clean up all workspaces with a few exceptions
+----------------------------------------------
+This one uses grep to create a whitelist:
+
+ls /var/jenkins_home/workspace \ 
+  | grep -v -E '(job-to-skip|another-job-to-skip)$' \
+  | xargs -I {} rm -rf /var/jenkins_home/workspace/{}
+
+
+Clean up 10 largest workspaces
+------------------------------
+This one uses du and sort to list workspaces in order of largest to smallest. Then, it uses head to grab the first 10:
+
+du -d 1 /var/jenkins_home/workspace \
+  | sort -n -r \
+  | head -n 10 \
+  | xargs -I {} rm -rf /var/jenkins_home/workspace/{}
