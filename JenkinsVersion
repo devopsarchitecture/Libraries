@@ -1,0 +1,15 @@
+     
+     stage('Version') {
+            steps{
+                script{
+                 
+                     def versionId = sh (
+                     script: "cat build.gradle  | grep version ",
+                     returnStdout: true).trim()
+                     println("versionId:${versionId}")
+                     
+                   } 
+                 
+                }  
+                  
+            }
